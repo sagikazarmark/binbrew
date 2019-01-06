@@ -1,4 +1,4 @@
-package repository
+package provider
 
 import (
 	"testing"
@@ -7,13 +7,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRepository_ResolvesABinary(t *testing.T) {
+func TestProvider_ResolvesABinary(t *testing.T) {
 	expected := Binary{
 		Name:    "name",
 		Version: "1.0.0",
 	}
 
-	repository := &Repository{
+	repository := &Provider{
 		binaries: map[string]Binary{
 			"name": expected,
 		},
@@ -25,8 +25,8 @@ func TestRepository_ResolvesABinary(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
-func TestRepository_BinaryNotFound(t *testing.T) {
-	repository := &Repository{}
+func TestProvider_BinaryNotFound(t *testing.T) {
+	repository := &Provider{}
 
 	_, err := repository.Resolve("not_found", "1.0.0")
 

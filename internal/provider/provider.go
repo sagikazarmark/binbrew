@@ -1,4 +1,4 @@
-package repository
+package provider
 
 import "errors"
 
@@ -6,7 +6,7 @@ var (
 	ErrBinaryNotFound = errors.New("binary not found")
 )
 
-type Repository struct {
+type Provider struct {
 	binaries map[string]Binary
 }
 
@@ -15,7 +15,7 @@ type Binary struct {
 	Version string
 }
 
-func (r *Repository) Resolve(name string, version string) (Binary, error) {
+func (r *Provider) Resolve(name string, version string) (Binary, error) {
 	binary, ok := r.binaries[name]
 	if !ok {
 		return binary, ErrBinaryNotFound
