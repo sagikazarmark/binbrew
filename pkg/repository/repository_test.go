@@ -7,7 +7,7 @@ import (
 )
 
 func TestRepository_ResolvesABinary(t *testing.T) {
-	repository := Repository{}
+	repository := &Repository{}
 
 	actual := repository.Resolve("name", "1.0.0")
 

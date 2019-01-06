@@ -8,7 +8,7 @@ type Binary struct {
 	Version string
 }
 
-func (r Repository) Resolve(name string, version string) Binary {
+func (r *Repository) Resolve(name string, version string) Binary {
 	return Binary{
 		Name:    name,
 		Version: version,
