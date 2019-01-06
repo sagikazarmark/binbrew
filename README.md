@@ -6,6 +6,9 @@
 [![GolangCI](https://golangci.com/badges/github.com/sagikazarmark/binbrew.svg)](https://golangci.com/r/github.com/sagikazarmark/binbrew)
 [![GoDoc](http://img.shields.io/badge/godoc-reference-5272B4.svg?style=flat-square)](https://godoc.org/github.com/sagikazarmark/binbrew)
 
+Binbrew installs pre-built binary dependencies (from Github).
+It's primary use case is to help setting up development environments and
+allow to use the same tools in CI environments as well.
 
 
 ## License
