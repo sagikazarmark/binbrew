@@ -4,12 +4,14 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestRepository_ResolvesABinary(t *testing.T) {
 	repository := &Repository{}
 
-	actual := repository.Resolve("name", "1.0.0")
+	actual, err := repository.Resolve("name", "1.0.0")
+	require.NoError(t, err)
 
 	expected := Binary{
 		Name:    "name",
@@ -17,4 +19,12 @@ func TestRepository_ResolvesABinary(t *testing.T) {
 	}
 
 	assert.Equal(t, expected, actual)
+}
+
+func TestRepository_BinaryNotFound(t *testing.T) {
+	repository := &Repository{}
+
+	_, err := repository.Resolve("not_found", "1.0.0")
+
+	assert.Equal(t, err, ErrBinaryNotFound)
 }
