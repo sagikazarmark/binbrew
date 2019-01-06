@@ -1,13 +1,23 @@
 package provider
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/Masterminds/semver"
+)
 
 var (
 	ErrBinaryNotFound = errors.New("binary not found")
 )
 
+type BinaryRule struct {
+	Constraint string
+	URL        string
+	File       string
+}
+
 type Provider struct {
-	binaries map[string]Binary
+	binaryRules map[string][]BinaryRule
 }
 
 type Binary struct {
@@ -16,10 +26,25 @@ type Binary struct {
 }
 
 func (r *Provider) Resolve(name string, version string) (Binary, error) {
-	binary, ok := r.binaries[name]
+	v := semver.MustParse(version)
+	binaryRules, ok := r.binaryRules[name]
 	if !ok {
-		return binary, ErrBinaryNotFound
+		return Binary{}, ErrBinaryNotFound
 	}
 
-	return binary, nil
+	for _, binaryRule := range binaryRules {
+		constraint, err := semver.NewConstraint(binaryRule.Constraint)
+		if err != nil {
+			panic(err) // This should never happen
+		}
+
+		if constraint.Check(v) {
+			return Binary{
+				Name:    name,
+				Version: version,
+			}, nil
+		}
+	}
+
+	return Binary{}, errors.New("constraint not found")
 }

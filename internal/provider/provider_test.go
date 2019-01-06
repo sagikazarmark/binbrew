@@ -14,8 +14,12 @@ func TestProvider_ResolvesABinary(t *testing.T) {
 	}
 
 	repository := &Provider{
-		binaries: map[string]Binary{
-			"name": expected,
+		binaryRules: map[string][]BinaryRule{
+			"name": {
+				BinaryRule{
+					Constraint: "*",
+				},
+			},
 		},
 	}
 
