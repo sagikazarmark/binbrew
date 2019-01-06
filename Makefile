@@ -54,7 +54,7 @@ build-release: ## Build a binary without debug information
 	@${MAKE} LDFLAGS="-w ${LDFLAGS}" build
 
 .PHONY: check
-check: test-all lint ## Run tests and linters
+check: test lint ## Run tests and linters
 
 bin/gotestsum: bin/gotestsum-${GOTESTSUM_VERSION}
 	@ln -sf gotestsum-${GOTESTSUM_VERSION} bin/gotestsum
