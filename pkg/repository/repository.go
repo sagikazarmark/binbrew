@@ -7,6 +7,7 @@ var (
 )
 
 type Repository struct {
+	binaries map[string]Binary
 }
 
 type Binary struct {
@@ -15,12 +16,10 @@ type Binary struct {
 }
 
 func (r *Repository) Resolve(name string, version string) (Binary, error) {
-	if name == "not_found" {
-		return Binary{}, ErrBinaryNotFound
+	binary, ok := r.binaries[name]
+	if !ok {
+		return binary, ErrBinaryNotFound
 	}
 
-	return Binary{
-		Name:    name,
-		Version: version,
-	}, nil
+	return binary, nil
 }
