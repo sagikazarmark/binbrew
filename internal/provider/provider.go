@@ -88,12 +88,12 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 				Arch:     runtime.GOARCH,
 			}
 
-			urlTemplate, err := template.New("").Parse(binaryRule.Template.URL)
+			urlTemplate, err := template.New("").Funcs(funcMap).Parse(binaryRule.Template.URL)
 			if err != nil {
 				return nil, err
 			}
 
-			fileTemplate, err := template.New("").Parse(binaryRule.Template.File)
+			fileTemplate, err := template.New("").Funcs(funcMap).Parse(binaryRule.Template.File)
 			if err != nil {
 				return nil, err
 			}
