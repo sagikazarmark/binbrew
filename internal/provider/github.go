@@ -15,6 +15,7 @@ func NewGithubProvider() *Provider {
 			"protoc":        "google/protobuf",
 			"goreleaser":    "goreleaser/goreleaser",
 			"gotestsum":     "gotestyourself/gotestsum",
+			"jq":            "stedolan/jq",
 		},
 		binaryRules: map[string][]BinaryRule{
 			"gobuffalo/packr": {
@@ -105,6 +106,26 @@ func NewGithubProvider() *Provider {
 						Description: "Database migrations. CLI and Golang library.",
 						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/migrate.{{ .Os }}-{{ .Arch }}.tar.gz"),
 						File:        "migrate.{{ .Os }}-{{ .Arch }}",
+					},
+				},
+			},
+			"stedolan/jq": {
+				{
+					VersionConstraint: ">=1.5",
+					Template: BinaryTemplate{
+						Name:        "jq",
+						Description: "Command-line JSON processor",
+						URL:         fmt.Sprintf(urlPrefix, "jq-{{ .Version }}/jq-{{ jq_osarch .Os .Arch }}"),
+						File:        "jq-{{ jq_osarch .Os .Arch }}",
+					},
+				},
+				{
+					VersionConstraint: "<1.5,>=1.3",
+					Template: BinaryTemplate{
+						Name:        "jq",
+						Description: "Command-line JSON processor",
+						URL:         fmt.Sprintf(urlPrefix, "jq-{{ .Version }}/jq-{{ .Os|protobuf_goos }}-{{ .Arch|jq_goarch }}"),
+						File:        "jq-{{ .Os|protobuf_goos }}-{{ .Arch|jq_goarch }}",
 					},
 				},
 			},

@@ -21,3 +21,6 @@ echo "Installing goreleaser 0.95.2"
 
 echo "Installing gotestsum 0.3.2"
 ../build/binbrew install gotestsum@0.3.2
+
+echo "Installing jq 1.6"
+../build/binbrew install jq@1.6

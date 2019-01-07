@@ -27,3 +27,9 @@ echo "Installing gotestyourself/gotestsum 0.3.2"
 
 echo "Installing golang-migrate/migrate 4.2.1"
 ../build/binbrew install golang-migrate/migrate@4.2.1
+
+echo "Installing stedolan/jq 1.6"
+../build/binbrew install stedolan/jq@1.6
+
+echo "Installing stedolan/jq 1.4"
+../build/binbrew install stedolan/jq@1.4
