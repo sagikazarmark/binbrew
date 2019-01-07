@@ -32,7 +32,7 @@ func TestProvider_ResolvesABinary(t *testing.T) {
 				BinaryRule{
 					VersionConstraint: "*",
 					Template: BinaryTemplate{
-						URL:  "https://github.com/{{ .Name }}/releases/download/{{ .Version }}/repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz", // nolint: lll
+						URL:  "https://github.com/{{ .FullName }}/releases/download/{{ .Version }}/repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz", // nolint: lll
 						File: "repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}",
 					},
 				},

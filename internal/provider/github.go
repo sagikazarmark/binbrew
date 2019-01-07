@@ -2,7 +2,7 @@ package provider
 
 import "fmt"
 
-const urlPrefix = "https://github.com/{{ .Name }}/releases/download/%s"
+const urlPrefix = "https://github.com/{{ .FullName }}/releases/download/%s"
 
 // NewGithubProvider
 func NewGithubProvider() *Provider {

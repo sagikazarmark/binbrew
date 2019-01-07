@@ -44,10 +44,11 @@ type Binary struct {
 
 // TemplateContext is passed to URL and File templates.
 type TemplateContext struct {
-	Name    string
-	Version string
-	Os      string
-	Arch    string
+	Name     string
+	FullName string
+	Version  string
+	Os       string
+	Arch     string
 }
 
 // Resolve resolves a binary.
@@ -73,11 +74,18 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 		}
 
 		if constraint.Check(v) {
+			binaryName := name
+			nameSegments := strings.SplitN(name, "/", 2)
+			if len(nameSegments) > 1 {
+				binaryName = nameSegments[1]
+			}
+
 			tplCtx := TemplateContext{
-				Name:    name,
-				Version: version,
-				Os:      runtime.GOOS,
-				Arch:    runtime.GOARCH,
+				Name:     binaryName,
+				FullName: name,
+				Version:  version,
+				Os:       runtime.GOOS,
+				Arch:     runtime.GOARCH,
 			}
 
 			urlTemplate, err := template.New("").Parse(binaryRule.Template.URL)
@@ -95,12 +103,6 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 			err = urlTemplate.Execute(&buf, tplCtx)
 			if err != nil {
 				return nil, err
-			}
-
-			binaryName := name
-			nameSegments := strings.SplitN(name, "/", 2)
-			if len(nameSegments) > 1 {
-				binaryName = nameSegments[1]
 			}
 
 			binary := &Binary{
