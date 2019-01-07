@@ -69,7 +69,7 @@ func runInstall(options installOptions) error {
 			return err
 		}
 
-		err = ioutil.WriteFile(filepath.Join("bin", binary.Name), input, 0644)
+		err = ioutil.WriteFile(filepath.Join("bin", binary.Name), input, 0744)
 		if err != nil {
 			return err
 		}
