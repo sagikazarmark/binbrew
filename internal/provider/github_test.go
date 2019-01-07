@@ -3,6 +3,7 @@ package provider
 import (
 	"fmt"
 	"testing"
+	"text/template"
 
 	"github.com/Masterminds/semver"
 	"github.com/stretchr/testify/require"
@@ -19,6 +20,12 @@ func TestNewGithubProvider(t *testing.T) {
 
 			t.Run(fmt.Sprintf("%s/%s", name, rule.VersionConstraint), func(t *testing.T) {
 				_, err := semver.NewConstraint(rule.VersionConstraint)
+				require.NoError(t, err)
+
+				_, err = template.New("").Parse(rule.URLTemplate)
+				require.NoError(t, err)
+
+				_, err = template.New("").Parse(rule.FileTemplate)
 				require.NoError(t, err)
 			})
 		}
