@@ -8,15 +8,15 @@ const urlPrefix = "https://github.com/{{ .Name }}/releases/download/%s"
 func NewGithubProvider() *Provider {
 	return &Provider{
 		binaryRules: map[string][]BinaryRule{
-			"dep": {
+			"golang/dep": {
 				{
 					VersionConstraint: ">0.3.0",
-					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}.zip"),
+					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}"),
 					FileTemplate:      "dep-{{ .Os }}-{{ .Arch }}",
 				},
 				{
 					VersionConstraint: "<=0.3.0",
-					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}"),
+					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}.zip"),
 					FileTemplate:      "dep-{{ .Os }}-{{ .Arch }}",
 				},
 			},
