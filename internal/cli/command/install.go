@@ -1,6 +1,10 @@
 package command
 
 import (
+	"os"
+
+	"github.com/hashicorp/go-getter"
+	"github.com/sagikazarmark/binbrew/internal/provider"
 	"github.com/spf13/cobra"
 )
 
@@ -29,5 +33,22 @@ func NewInstallCommand() *cobra.Command {
 }
 
 func runInstall(options installOptions) error {
+	p := provider.NewGithubProvider()
+
+	binary, err := p.Resolve(options.name, options.version)
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll("bin/tmp", 0744)
+	if err != nil {
+		return err
+	}
+
+	err = getter.GetAny("bin/tmp", binary.URL)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
