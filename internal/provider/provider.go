@@ -3,9 +3,9 @@ package provider
 import (
 	"bytes"
 	"errors"
-	"html/template"
 	"runtime"
 	"strings"
+	"text/template"
 
 	"github.com/Masterminds/semver"
 )
