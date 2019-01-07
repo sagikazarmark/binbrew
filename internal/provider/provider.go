@@ -29,6 +29,7 @@ type BinaryRule struct {
 
 // BinaryTemplate contains the binary information.
 type BinaryTemplate struct {
+	Name        string
 	Homepage    string
 	Description string
 	URL         string
@@ -76,10 +77,13 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 		}
 
 		if constraint.Check(v) {
-			binaryName := name
-			nameSegments := strings.SplitN(name, "/", 2)
-			if len(nameSegments) > 1 {
-				binaryName = nameSegments[1]
+			binaryName := binaryRule.Template.Name
+			if binaryName == "" {
+				binaryName = name
+				nameSegments := strings.SplitN(name, "/", 2)
+				if len(nameSegments) > 1 {
+					binaryName = nameSegments[1]
+				}
 			}
 
 			tplCtx := TemplateContext{

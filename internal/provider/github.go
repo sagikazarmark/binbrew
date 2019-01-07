@@ -63,9 +63,9 @@ func NewGithubProvider() *Provider {
 				{
 					VersionConstraint: "*",
 					Template: BinaryTemplate{
-						//Name:        "protoc",
+						Name:        "protoc",
 						Description: "Protocol Buffers - Google's data interchange format",
-						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/protoc-{{ .Version }}-{{ .Os|protobuf_goos }}-{{ .Arch|protobuf_goarch }}.zip"),
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/protoc-{{ .Version }}-{{ .Os|protobuf_goos }}-{{ .Arch|protobuf_goarch }}.zip"), // nolint: lll
 						File:        "bin/protoc",
 					},
 				},
