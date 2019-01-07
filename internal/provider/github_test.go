@@ -22,10 +22,10 @@ func TestNewGithubProvider(t *testing.T) {
 				_, err := semver.NewConstraint(rule.VersionConstraint)
 				require.NoError(t, err)
 
-				_, err = template.New("").Parse(rule.URLTemplate)
+				_, err = template.New("").Parse(rule.Template.URL)
 				require.NoError(t, err)
 
-				_, err = template.New("").Parse(rule.FileTemplate)
+				_, err = template.New("").Parse(rule.Template.File)
 				require.NoError(t, err)
 			})
 		}

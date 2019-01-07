@@ -11,8 +11,9 @@ import (
 
 func TestProvider_ResolvesABinary(t *testing.T) {
 	expected := &Binary{
-		Name:    "org/repo",
-		Version: "1.0.0",
+		Name:     "repo",
+		FullName: "org/repo",
+		Version:  "1.0.0",
 		URL: fmt.Sprintf(
 			"https://github.com/org/repo/releases/download/1.0.0/repo_1.0.0_%s_%s.tar.gz",
 			runtime.GOOS,
@@ -30,8 +31,10 @@ func TestProvider_ResolvesABinary(t *testing.T) {
 			"org/repo": {
 				BinaryRule{
 					VersionConstraint: "*",
-					URLTemplate:       "https://github.com/{{ .Name }}/releases/download/{{ .Version }}/repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz", // nolint: lll
-					FileTemplate:      "repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}",
+					Template: BinaryTemplate{
+						URL:  "https://github.com/{{ .Name }}/releases/download/{{ .Version }}/repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz", // nolint: lll
+						File: "repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}",
+					},
 				},
 			},
 		},

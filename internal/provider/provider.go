@@ -23,8 +23,13 @@ type Provider struct {
 // BinaryRule contains all information to resolve a binary.
 type BinaryRule struct {
 	VersionConstraint string
-	URLTemplate       string
-	FileTemplate      string
+	Template          BinaryTemplate
+}
+
+// BinaryTemplate contains the binary information.
+type BinaryTemplate struct {
+	URL  string
+	File string
 }
 
 // Binary is a result of a binary resolution.
@@ -70,12 +75,12 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 				Arch:    runtime.GOARCH,
 			}
 
-			urlTemplate, err := template.New("").Parse(binaryRule.URLTemplate)
+			urlTemplate, err := template.New("").Parse(binaryRule.Template.URL)
 			if err != nil {
 				return nil, err
 			}
 
-			fileTemplate, err := template.New("").Parse(binaryRule.FileTemplate)
+			fileTemplate, err := template.New("").Parse(binaryRule.Template.File)
 			if err != nil {
 				return nil, err
 			}
