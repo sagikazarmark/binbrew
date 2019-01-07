@@ -11,6 +11,36 @@ It's primary use case is to help setting up development environments and
 allow to use the same tools in CI environments as well.
 
 
+## Installation
+
+Add the following to your installation scripts:
+
+```bash
+export BINBREW_VERSION=0.1.0
+curl -sfL https://git.io/binbrew | bash -s -- -b ./bin/ v${BINBREW_VERSION}
+```
+
+To install the latest version simply omit the version:
+
+```bash
+curl -sfL https://git.io/binbrew | bash -s -- -b ./bin/
+```
+
+*Note:* Binbrew is still under heavy development, so it's recommended to lock onto a specific version.
+
+Use it in your Makefile:
+
+```makefile
+BINBREW_VERSION = 0.1.0
+bin/binbrew: bin/binbrew-${BINBREW_VERSION}
+	@ln -sf binbrew-${BINBREW_VERSION} bin/binbrew
+bin/binbrew-${BINBREW_VERSION}:
+	@mkdir -p bin
+	curl -sfL https://git.io/binbrew | bash -s -- -b ./bin/ v${BINBREW_VERSION}
+	@mv bin/binbrew $@
+```
+
+
 ## Quick start
 
 In order to install binaries run the following command:
