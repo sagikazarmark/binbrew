@@ -8,6 +8,16 @@ const urlPrefix = "https://github.com/{{ .FullName }}/releases/download/%s"
 func NewGithubProvider() *Provider {
 	return &Provider{
 		binaryRules: map[string][]BinaryRule{
+			"gobuffalo/packr": {
+				{
+					VersionConstraint: "*",
+					Template: BinaryTemplate{
+						Description: "The simple and easy way to embed static files into Go binaries.",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/packr_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz"),
+						File:        "packr_{{ .Version }}_{{ .Os }}_{{ .Arch }}/packr",
+					},
+				},
+			},
 			"golang/dep": {
 				{
 					VersionConstraint: ">0.3.0",
@@ -28,13 +38,14 @@ func NewGithubProvider() *Provider {
 					},
 				},
 			},
-			"mattes/migrate": {
+			"google/protobuf": {
 				{
 					VersionConstraint: "*",
 					Template: BinaryTemplate{
-						Description: "Database migrations. CLI and Golang library.",
-						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/migrate.{{ .Os }}-{{ .Arch }}.tar.gz"),
-						File:        "migrate.{{ .Os }}-{{ .Arch }}",
+						Name:        "protoc",
+						Description: "Protocol Buffers - Google's data interchange format",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/protoc-{{ .Version }}-{{ .Os|protobuf_goos }}-{{ .Arch|protobuf_goarch }}.zip"), // nolint: lll
+						File:        "bin/protoc",
 					},
 				},
 			},
@@ -49,24 +60,13 @@ func NewGithubProvider() *Provider {
 					},
 				},
 			},
-			"gobuffalo/packr": {
+			"mattes/migrate": {
 				{
 					VersionConstraint: "*",
 					Template: BinaryTemplate{
-						Description: "The simple and easy way to embed static files into Go binaries.",
-						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/packr_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz"),
-						File:        "packr_{{ .Version }}_{{ .Os }}_{{ .Arch }}/packr",
-					},
-				},
-			},
-			"google/protobuf": {
-				{
-					VersionConstraint: "*",
-					Template: BinaryTemplate{
-						Name:        "protoc",
-						Description: "Protocol Buffers - Google's data interchange format",
-						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/protoc-{{ .Version }}-{{ .Os|protobuf_goos }}-{{ .Arch|protobuf_goarch }}.zip"), // nolint: lll
-						File:        "bin/protoc",
+						Description: "Database migrations. CLI and Golang library.",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/migrate.{{ .Os }}-{{ .Arch }}.tar.gz"),
+						File:        "migrate.{{ .Os }}-{{ .Arch }}",
 					},
 				},
 			},
