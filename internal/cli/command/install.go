@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hashicorp/go-getter"
+	"github.com/hashicorp/go-getter" // nolint: goimports
 	"github.com/sagikazarmark/binbrew/internal/provider"
 	"github.com/spf13/cobra"
 )
