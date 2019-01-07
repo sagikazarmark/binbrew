@@ -11,6 +11,41 @@ It's primary use case is to help setting up development environments and
 allow to use the same tools in CI environments as well.
 
 
+## Quick start
+
+In order to install binaries run the following command:
+
+```bash
+binbrew install dep@0.5.0
+```
+
+You can install multiple binaries with a single command:
+
+```bash
+binbrew install dep@0.5.0 protoc@3.6.1
+```
+
+
+## Usage
+
+```
+Binary installer
+
+Usage:
+  binbrew [command]
+
+Available Commands:
+  help        Help about any command
+  install     Install one or more binaries
+
+Flags:
+  -h, --help      help for binbrew
+      --version   version for binbrew
+
+Use "binbrew [command] --help" for more information about a command.
+```
+
+
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE) for more information.
