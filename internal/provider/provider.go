@@ -11,8 +11,9 @@ import (
 )
 
 var (
-	ErrBinaryNotFound         = errors.New("binary not found")
-	ErrNoMatchingVersionFound = errors.New("no matching version found")
+	ErrBinaryNotFound            = errors.New("binary not found")
+	ErrNoMatchingVersionFound    = errors.New("no matching version found")
+	ErrLatestVersionNotSupported = errors.New("latest version is not supported yet")
 )
 
 // Provider contains a set of binary rules.
@@ -51,6 +52,10 @@ type TemplateContext struct {
 
 // Resolve resolves a binary.
 func (r *Provider) Resolve(name string, version string) (*Binary, error) {
+	if strings.ToLower(version) == "latest" {
+		return nil, ErrLatestVersionNotSupported
+	}
+
 	v, err := semver.NewVersion(version)
 	if err != nil {
 		return nil, err

@@ -53,3 +53,11 @@ func TestProvider_BinaryNotFound(t *testing.T) {
 
 	assert.Equal(t, err, ErrBinaryNotFound)
 }
+
+func TestProvider_LatestVersionNotSupported(t *testing.T) {
+	repository := &Provider{}
+
+	_, err := repository.Resolve("org/repo", "latest")
+
+	assert.Equal(t, err, ErrLatestVersionNotSupported)
+}
