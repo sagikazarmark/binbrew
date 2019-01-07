@@ -1,9 +1,9 @@
 package command
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 
 	"github.com/hashicorp/go-getter"
 	"github.com/sagikazarmark/binbrew/internal/provider"
@@ -42,22 +42,24 @@ func runInstall(options installOptions) error {
 		return err
 	}
 
-	err = os.MkdirAll("bin/tmp", 0744)
+	tmp := filepath.Join("bin/tmp", binary.Name)
+
+	err = os.MkdirAll(tmp, 0744)
 	if err != nil {
 		return err
 	}
 
-	err = getter.GetAny("bin/tmp", binary.URL)
+	err = getter.GetAny(tmp, binary.URL)
 	if err != nil {
 		return err
 	}
 
-	input, err := ioutil.ReadFile(fmt.Sprintf("bin/tmp/%s", binary.File))
+	input, err := ioutil.ReadFile(filepath.Join(tmp, binary.File))
 	if err != nil {
 		return err
 	}
 
-	err = ioutil.WriteFile(fmt.Sprintf("bin/%s", binary.Name), input, 0644)
+	err = ioutil.WriteFile(filepath.Join("bin", binary.Name), input, 0644)
 	if err != nil {
 		return err
 	}
