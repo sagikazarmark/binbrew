@@ -21,6 +21,7 @@ TEST_FORMAT = short-verbose
 endif
 
 # Dependency versions
+BINBREW_VERSION = 0.1.1
 GOTESTSUM_VERSION = 0.3.2
 GOLANGCI_VERSION = 1.12.5
 GORELEASER_VERSION = 0.95.2
@@ -30,6 +31,13 @@ GOLANG_VERSION = 1.11
 # Add the ability to override some variables
 # Use with care
 -include override.mk
+
+bin/binbrew: bin/binbrew-${BINBREW_VERSION}
+	@ln -sf binbrew-${BINBREW_VERSION} bin/binbrew
+bin/binbrew-${BINBREW_VERSION}:
+	@mkdir -p bin
+	curl -sfL https://git.io/binbrew | bash -s -- -b ./bin/ v${BINBREW_VERSION}
+	@mv bin/binbrew $@
 
 .PHONY: clear
 clear: ## Clear the working area and the project
@@ -59,14 +67,9 @@ check: test lint ## Run tests and linters
 
 bin/gotestsum: bin/gotestsum-${GOTESTSUM_VERSION}
 	@ln -sf gotestsum-${GOTESTSUM_VERSION} bin/gotestsum
-bin/gotestsum-${GOTESTSUM_VERSION}:
-	@mkdir -p bin
-ifeq (${OS}, Darwin)
-	curl -L https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_darwin_amd64.tar.gz | tar -zOxf - gotestsum > ./bin/gotestsum-${GOTESTSUM_VERSION} && chmod +x ./bin/gotestsum-${GOTESTSUM_VERSION}
-endif
-ifeq (${OS}, Linux)
-	curl -L https://github.com/gotestyourself/gotestsum/releases/download/v${GOTESTSUM_VERSION}/gotestsum_${GOTESTSUM_VERSION}_linux_amd64.tar.gz | tar -zOxf - gotestsum > ./bin/gotestsum-${GOTESTSUM_VERSION} && chmod +x ./bin/gotestsum-${GOTESTSUM_VERSION}
-endif
+bin/gotestsum-${GOTESTSUM_VERSION}: bin/binbrew
+	bin/binbrew install gotestsum@${GOTESTSUM_VERSION}
+	@mv bin/gotestsum $@
 
 TEST_PKGS ?= ./...
 TEST_REPORT_NAME ?= results.xml
@@ -81,8 +84,7 @@ test: bin/gotestsum ## Run tests
 bin/golangci-lint: bin/golangci-lint-${GOLANGCI_VERSION}
 	@ln -sf golangci-lint-${GOLANGCI_VERSION} bin/golangci-lint
 bin/golangci-lint-${GOLANGCI_VERSION}:
-	@mkdir -p bin
-	curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | bash -s -- -b ./bin/ v${GOLANGCI_VERSION}
+	bin/binbrew install golangci-lint@${GOLANGCI_VERSION}
 	@mv bin/golangci-lint $@
 
 .PHONY: lint
@@ -92,8 +94,7 @@ lint: bin/golangci-lint ## Run linter
 bin/goreleaser: bin/goreleaser-${GORELEASER_VERSION}
 	@ln -sf goreleaser-${GORELEASER_VERSION} bin/goreleaser
 bin/goreleaser-${GORELEASER_VERSION}:
-	@mkdir -p bin
-	curl -sfL https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh | bash -s -- -b ./bin/ v${GORELEASER_VERSION}
+	bin/binbrew install goreleaser@${GORELEASER_VERSION}
 	@mv bin/goreleaser $@
 
 .PHONY: release
