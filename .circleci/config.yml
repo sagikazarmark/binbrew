@@ -17,6 +17,11 @@ jobs:
 
             -
                 run:
+                    name: Install dependencies
+                    command: go get -v ./...
+
+            -
+                run:
                     name: Run tests
                     command: TEST_PKGS=$(echo `go list ./... | circleci tests split`) TEST_REPORT_NAME=results_${CIRCLE_NODE_INDEX}.xml make test
 
