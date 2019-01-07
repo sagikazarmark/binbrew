@@ -26,6 +26,16 @@ jobs:
                     command: TEST_PKGS=$(echo `go list ./... | circleci tests split`) TEST_REPORT_NAME=results_${CIRCLE_NODE_INDEX}.xml make test
 
             -
+                run:
+                    name: Release
+                    command: |
+                        if [[ -z "$CIRCLE_TAG" ]]; then
+                            echo "Skipping release";
+                        else
+                            make release
+                        fi
+
+            -
                 save_cache:
                     name: Save build dependencies
                     key: build-deps-v1-{{ .Branch }}-{{ checksum "Makefile" }}
