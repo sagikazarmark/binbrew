@@ -29,8 +29,10 @@ type BinaryRule struct {
 
 // BinaryTemplate contains the binary information.
 type BinaryTemplate struct {
-	URL  string
-	File string
+	Homepage    string
+	Description string
+	URL         string
+	File        string
 }
 
 // Binary is a result of a binary resolution.

@@ -33,7 +33,7 @@ func TestNewGithubProvider(t *testing.T) {
 					Arch:     runtime.GOARCH,
 				}
 
-				urlTemplate, err := template.New("").Parse(rule.Template.URL)
+				urlTemplate, err := template.New("").Funcs(funcMap).Parse(rule.Template.URL)
 				require.NoError(t, err)
 
 				var buf bytes.Buffer
@@ -44,7 +44,7 @@ func TestNewGithubProvider(t *testing.T) {
 				_, err = url.Parse(buf.String())
 				require.NoError(t, err)
 
-				fileTemplate, err := template.New("").Parse(rule.Template.File)
+				fileTemplate, err := template.New("").Funcs(funcMap).Parse(rule.Template.File)
 				require.NoError(t, err)
 
 				buf.Reset()
