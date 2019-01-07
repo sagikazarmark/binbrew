@@ -44,13 +44,15 @@ func TestNewGithubProvider(t *testing.T) {
 				_, err = url.Parse(buf.String())
 				require.NoError(t, err)
 
-				fileTemplate, err := template.New("").Funcs(funcMap).Parse(rule.Template.File)
-				require.NoError(t, err)
+				if rule.Template.File != "" {
+					fileTemplate, err := template.New("").Funcs(funcMap).Parse(rule.Template.File)
+					require.NoError(t, err)
 
-				buf.Reset()
+					buf.Reset()
 
-				err = fileTemplate.Execute(&buf, dummyContext)
-				require.NoError(t, err)
+					err = fileTemplate.Execute(&buf, dummyContext)
+					require.NoError(t, err)
+				}
 			})
 		}
 	}
