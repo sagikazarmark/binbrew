@@ -2,5 +2,4 @@ builds:
     -
         env:
             - CGO_ENABLED=0
-        ldflags:
-            - -s -w -X main.build={{ .Version }} -X main.commitHash={{ .ShortCommit }} -X main.buildDate={{ .Date }}
+        ldflags: "-s -w -X main.build={{ .Version }} -X main.commitHash={{ .ShortCommit }} -X main.buildDate={{ .Date }}"
