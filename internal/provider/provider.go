@@ -19,6 +19,7 @@ var (
 // Provider contains a set of binary rules.
 type Provider struct {
 	binaryRules map[string][]BinaryRule
+	vanityNames map[string]string
 }
 
 // BinaryRule contains all information to resolve a binary.
@@ -58,6 +59,11 @@ type TemplateContext struct {
 func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 	if strings.ToLower(version) == "latest" {
 		return nil, ErrLatestVersionNotSupported
+	}
+
+	// Resolve a vanity name (if any)
+	if originalName, ok := r.vanityNames[name]; ok {
+		name = originalName
 	}
 
 	v, err := semver.NewVersion(version)

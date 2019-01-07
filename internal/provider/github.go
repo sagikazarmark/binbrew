@@ -8,6 +8,14 @@ const urlPrefix = "https://github.com/{{ .FullName }}/releases/download/%s"
 // NewGithubProvider
 func NewGithubProvider() *Provider {
 	return &Provider{
+		vanityNames: map[string]string{
+			"dep":           "golang/dep",
+			"golangci-lint": "golangci/golangci-lint",
+			"protobuf":      "google/protobuf",
+			"protoc":        "google/protobuf",
+			"goreleaser":    "goreleaser/goreleaser",
+			"gotestsum":     "gotestyourself/gotestsum",
+		},
 		binaryRules: map[string][]BinaryRule{
 			"gobuffalo/packr": {
 				{
