@@ -15,16 +15,16 @@ var (
 	ErrNoMatchingVersionFound = errors.New("no matching version found")
 )
 
+// Provider contains a set of binary rules.
+type Provider struct {
+	binaryRules map[string][]BinaryRule
+}
+
 // BinaryRule contains all information to resolve a binary.
 type BinaryRule struct {
 	VersionConstraint string
 	URLTemplate       string
 	FileTemplate      string
-}
-
-// Provider contains a set of binary rules.
-type Provider struct {
-	binaryRules map[string][]BinaryRule
 }
 
 // Binary is a result of a binary resolution.
