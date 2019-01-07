@@ -1,3 +1,4 @@
+// nolint: goconst
 package provider
 
 import (
@@ -24,6 +25,8 @@ var internalFuncMap = template.FuncMap{
 	"goarch":          goarch,
 	"protobuf_goarch": protobufGoarch,
 	"protobuf_goos":   protobufGoos,
+	"jq_goarch":       jqGoarch,
+	"jq_osarch":       jqOsarch,
 }
 
 // goarch matches arch representations.
@@ -60,4 +63,45 @@ func protobufGoos(s string) string {
 	}
 
 	return s
+}
+
+// jq_goarch matches arch representations.
+func jqGoarch(s string) string {
+	switch s {
+	case "386":
+		return "x86"
+
+	case "amd64":
+		return "x86_64"
+	}
+
+	return s
+}
+
+// jq_osarch matches arch representations.
+func jqOsarch(os string, arch string) string {
+	switch os {
+	case "linux":
+		switch arch {
+		case "386":
+			return "linux32"
+
+		case "amd64":
+			return "linux64"
+		}
+
+	case "darwin":
+		return "osx-amd64"
+
+	case "windows":
+		switch arch {
+		case "386":
+			return "win32.exe"
+
+		case "amd64":
+			return "win64.exe"
+		}
+	}
+
+	return ""
 }
