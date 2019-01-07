@@ -116,6 +116,41 @@ func TestProvider_ResolvesABinaryWithoutAFileName(t *testing.T) {
 	assert.Equal(t, expected, actual)
 }
 
+func TestProvider_ResolvesABinaryWithAVanityName(t *testing.T) {
+	expected := &Binary{
+		Name:     "repo",
+		FullName: "org/repo",
+		Version:  "1.0.0",
+		URL: fmt.Sprintf(
+			"https://github.com/org/repo/releases/download/1.0.0/repo_1.0.0_%s_%s.tar.gz",
+			runtime.GOOS,
+			runtime.GOARCH,
+		),
+		File: "repo",
+	}
+
+	repository := &Provider{
+		binaryRules: map[string][]BinaryRule{
+			"org/repo": {
+				BinaryRule{
+					VersionConstraint: "*",
+					Template: BinaryTemplate{
+						URL: "https://github.com/{{ .FullName }}/releases/download/{{ .Version }}/repo_{{ .Version }}_{{ .Os }}_{{ .Arch }}.tar.gz", // nolint: lll
+					},
+				},
+			},
+		},
+		vanityNames: map[string]string{
+			"repo": "org/repo",
+		},
+	}
+
+	actual, err := repository.Resolve("repo", "1.0.0")
+	require.NoError(t, err)
+
+	assert.Equal(t, expected, actual)
+}
+
 func TestProvider_BinaryNotFound(t *testing.T) {
 	repository := &Provider{}
 
