@@ -5,6 +5,7 @@ import (
 	"errors"
 	"html/template"
 	"runtime"
+	"strings"
 
 	"github.com/Masterminds/semver"
 )
@@ -28,10 +29,11 @@ type Provider struct {
 
 // Binary is a result of a binary resolution.
 type Binary struct {
-	Name    string
-	Version string
-	URL     string
-	File    string
+	Name     string
+	FullName string
+	Version  string
+	URL      string
+	File     string
 }
 
 // TemplateContext is passed to URL and File templates.
@@ -85,9 +87,16 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 				return nil, err
 			}
 
+			binaryName := name
+			nameSegments := strings.SplitN(name, "/", 2)
+			if len(nameSegments) > 1 {
+				binaryName = nameSegments[1]
+			}
+
 			binary := &Binary{
-				Name:    name,
-				Version: version,
+				Name:     binaryName,
+				FullName: name,
+				Version:  version,
 			}
 
 			binary.URL = buf.String()
