@@ -20,7 +20,7 @@ func NewInstallCommand() *cobra.Command {
 	options := installOptions{}
 
 	cmd := &cobra.Command{
-		Use:   "install NAME[@VERSION]...",
+		Use:   "install [flags] NAME[@VERSION]...",
 		Short: "Install one or more binaries",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -28,6 +28,7 @@ func NewInstallCommand() *cobra.Command {
 
 			return runInstall(options)
 		},
+		DisableFlagsInUseLine: true,
 	}
 
 	return cmd
