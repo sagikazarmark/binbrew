@@ -99,11 +99,6 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 				return nil, err
 			}
 
-			fileTemplate, err := template.New("").Funcs(funcMap).Parse(binaryRule.Template.File)
-			if err != nil {
-				return nil, err
-			}
-
 			var buf bytes.Buffer
 
 			err = urlTemplate.Execute(&buf, tplCtx)
@@ -115,18 +110,25 @@ func (r *Provider) Resolve(name string, version string) (*Binary, error) {
 				Name:     binaryName,
 				FullName: name,
 				Version:  version,
+				URL:      buf.String(),
+				File:     binaryName,
 			}
 
-			binary.URL = buf.String()
+			if binaryRule.Template.File != "" {
+				fileTemplate, err := template.New("").Funcs(funcMap).Parse(binaryRule.Template.File)
+				if err != nil {
+					return nil, err
+				}
 
-			buf.Reset()
+				buf.Reset()
 
-			err = fileTemplate.Execute(&buf, tplCtx)
-			if err != nil {
-				return nil, err
+				err = fileTemplate.Execute(&buf, tplCtx)
+				if err != nil {
+					return nil, err
+				}
+
+				binary.File = buf.String()
 			}
-
-			binary.File = buf.String()
 
 			return binary, nil
 		}
