@@ -2,7 +2,7 @@ package provider
 
 import "fmt"
 
-const urlPrefix = "https://github.com/{{.FullName}}/releases/download/%s"
+const urlPrefix = "https://github.com/{{ .Name }}/releases/download/%s"
 
 // NewGithubProvider
 func NewGithubProvider() *Provider {
@@ -10,14 +10,14 @@ func NewGithubProvider() *Provider {
 		binaryRules: map[string][]BinaryRule{
 			"dep": {
 				{
-					Constraint: ">0.3.0",
-					URL:        fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{.Os}}-{{.Arch}}.zip"),
-					File:       "dep-{{.Os}}-{{.Arch}}",
+					VersionConstraint: ">0.3.0",
+					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}.zip"),
+					FileTemplate:      "dep-{{ .Os }}-{{ .Arch }}",
 				},
 				{
-					Constraint: "<=0.3.0",
-					URL:        fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{.Os}}-{{.Arch}}"),
-					File:       "dep-{{.Os}}-{{.Arch}}",
+					VersionConstraint: "<=0.3.0",
+					URLTemplate:       fmt.Sprintf(urlPrefix, "v{{.Version}}/dep-{{ .Os }}-{{ .Arch }}"),
+					FileTemplate:      "dep-{{ .Os }}-{{ .Arch }}",
 				},
 			},
 		},

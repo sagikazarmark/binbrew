@@ -1,50 +1,109 @@
 package provider
 
 import (
+	"bytes"
 	"errors"
+	"html/template"
+	"runtime"
 
 	"github.com/Masterminds/semver"
 )
 
 var (
-	ErrBinaryNotFound = errors.New("binary not found")
+	ErrBinaryNotFound         = errors.New("binary not found")
+	ErrNoMatchingVersionFound = errors.New("no matching version found")
 )
 
+// BinaryRule contains all information to resolve a binary.
 type BinaryRule struct {
-	Constraint string
-	URL        string
-	File       string
+	VersionConstraint string
+	URLTemplate       string
+	FileTemplate      string
 }
 
+// Provider contains a set of binary rules.
 type Provider struct {
 	binaryRules map[string][]BinaryRule
 }
 
+// Binary is a result of a binary resolution.
 type Binary struct {
 	Name    string
 	Version string
+	URL     string
+	File    string
 }
 
-func (r *Provider) Resolve(name string, version string) (Binary, error) {
-	v := semver.MustParse(version)
+// TemplateContext is passed to URL and File templates.
+type TemplateContext struct {
+	Name    string
+	Version string
+	Os      string
+	Arch    string
+}
+
+// Resolve resolves a binary.
+func (r *Provider) Resolve(name string, version string) (*Binary, error) {
+	v, err := semver.NewVersion(version)
+	if err != nil {
+		return nil, err
+	}
+
 	binaryRules, ok := r.binaryRules[name]
 	if !ok {
-		return Binary{}, ErrBinaryNotFound
+		return nil, ErrBinaryNotFound
 	}
 
 	for _, binaryRule := range binaryRules {
-		constraint, err := semver.NewConstraint(binaryRule.Constraint)
+		constraint, err := semver.NewConstraint(binaryRule.VersionConstraint)
 		if err != nil {
-			panic(err) // This should never happen
+			return nil, err // This should never happen
 		}
 
 		if constraint.Check(v) {
-			return Binary{
+			tplCtx := TemplateContext{
 				Name:    name,
 				Version: version,
-			}, nil
+				Os:      runtime.GOOS,
+				Arch:    runtime.GOARCH,
+			}
+
+			urlTemplate, err := template.New("").Parse(binaryRule.URLTemplate)
+			if err != nil {
+				return nil, err
+			}
+
+			fileTemplate, err := template.New("").Parse(binaryRule.FileTemplate)
+			if err != nil {
+				return nil, err
+			}
+
+			var buf bytes.Buffer
+
+			err = urlTemplate.Execute(&buf, tplCtx)
+			if err != nil {
+				return nil, err
+			}
+
+			binary := &Binary{
+				Name:    name,
+				Version: version,
+			}
+
+			binary.URL = buf.String()
+
+			buf.Reset()
+
+			err = fileTemplate.Execute(&buf, tplCtx)
+			if err != nil {
+				return nil, err
+			}
+
+			binary.File = buf.String()
+
+			return binary, nil
 		}
 	}
 
-	return Binary{}, errors.New("constraint not found")
+	return nil, ErrNoMatchingVersionFound
 }
