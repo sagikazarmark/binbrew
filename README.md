@@ -1,6 +1,6 @@
 # Binbrew
 
-[![Go Version](https://img.shields.io/badge/go%20version-%3E=1.11-orange.svg?style=flat-square)](https://github.com/sagikazarmark/binbrew)
+[![Go Version](https://img.shields.io/badge/go%20version-%3E=1.11.4-orange.svg?style=flat-square)](https://github.com/sagikazarmark/binbrew)
 [![CircleCI](https://circleci.com/gh/sagikazarmark/binbrew.svg?style=svg)](https://circleci.com/gh/sagikazarmark/binbrew)
 [![Go Report Card](https://goreportcard.com/badge/github.com/sagikazarmark/binbrew?style=flat-square)](https://goreportcard.com/report/github.com/sagikazarmark/binbrew)
 [![GolangCI](https://golangci.com/badges/github.com/sagikazarmark/binbrew.svg)](https://golangci.com/r/github.com/sagikazarmark/binbrew)
