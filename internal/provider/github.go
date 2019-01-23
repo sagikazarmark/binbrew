@@ -14,6 +14,7 @@ func NewGithubProvider() *Provider {
 			"protobuf":      "google/protobuf",
 			"protoc":        "google/protobuf",
 			"protolock":     "nilslice/protolock",
+			"prototool":     "uber/prototool",
 			"goreleaser":    "goreleaser/goreleaser",
 			"gotestsum":     "gotestyourself/gotestsum",
 			"jq":            "stedolan/jq",
@@ -136,6 +137,16 @@ func NewGithubProvider() *Provider {
 						Description: "Command-line JSON processor",
 						URL:         fmt.Sprintf(urlPrefix, "jq-{{ .Version }}/jq-{{ .Os|protobuf_goos }}-{{ .Arch|jq_goarch }}"),
 						File:        "jq-{{ .Os|protobuf_goos }}-{{ .Arch|jq_goarch }}",
+					},
+				},
+			},
+			"uber/prototool": {
+				{
+					VersionConstraint: "*",
+					Template: BinaryTemplate{
+						Description: "Your Swiss Army Knife for Protocol Buffers",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/prototool-{{ .Os | title }}-{{ .Arch | goarch }}"),
+						File:        "prototool-{{ .Os | title }}-{{ .Arch | goarch }}",
 					},
 				},
 			},
