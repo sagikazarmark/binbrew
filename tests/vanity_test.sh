@@ -24,3 +24,6 @@ echo "Installing gotestsum 0.3.2"
 
 echo "Installing jq 1.6"
 ../build/binbrew install jq@1.6
+
+echo "Installing protolock 0.10.0"
+../build/binbrew install protolock@0.10.0
