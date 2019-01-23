@@ -1,14 +1,18 @@
 package command
 
 import (
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/hashicorp/go-getter" // nolint: goimports
 	"github.com/sagikazarmark/binbrew/internal/provider"
 	"github.com/spf13/cobra"
+	"github.com/vbauerster/mpb"
+	"github.com/vbauerster/mpb/decor"
 )
 
 type installOptions struct {
@@ -59,7 +63,9 @@ func runInstall(options installOptions) error {
 			return err
 		}
 
-		err = getter.GetAny(tmp, binary.URL)
+		pb := &progressBar{}
+		err = getter.GetAny(tmp, binary.URL, getter.WithProgress(pb))
+		pb.progress.Wait()
 		if err != nil {
 			return err
 		}
@@ -77,3 +83,52 @@ func runInstall(options installOptions) error {
 
 	return nil
 }
+
+type progressBar struct {
+	// lock everything below
+	lock sync.Mutex
+
+	progress *mpb.Progress
+}
+
+// TrackProgress instantiates a new progress bar that will
+// display the progress of stream until closed.
+// total can be 0.
+func (cpb *progressBar) TrackProgress(src string, currentSize, totalSize int64, stream io.ReadCloser) io.ReadCloser {
+	cpb.lock.Lock()
+	defer cpb.lock.Unlock()
+
+	if cpb.progress == nil {
+		cpb.progress = mpb.New()
+	}
+	bar := cpb.progress.AddBar(
+		totalSize,
+		mpb.PrependDecorators(
+			decor.CountersKibiByte("% 6.1f / % 6.1f"),
+		),
+		mpb.AppendDecorators(
+			decor.EwmaETA(decor.ET_STYLE_MMSS, float64(totalSize)/2048),
+			decor.Name(" ] "),
+			decor.AverageSpeed(decor.UnitKiB, "% .2f"),
+		),
+	)
+
+	reader := bar.ProxyReader(stream)
+
+	return &readCloser{
+		Reader: reader,
+		close: func() error {
+			cpb.lock.Lock()
+			defer cpb.lock.Unlock()
+
+			return nil
+		},
+	}
+}
+
+type readCloser struct {
+	io.Reader
+	close func() error
+}
+
+func (c *readCloser) Close() error { return c.close() }

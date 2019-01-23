@@ -3,6 +3,7 @@ module github.com/sagikazarmark/binbrew
 require (
 	github.com/Masterminds/semver v1.4.2
 	github.com/Masterminds/sprig v2.17.1+incompatible
+	github.com/VividCortex/ewma v1.1.1 // indirect
 	github.com/aokoli/goutils v1.1.0 // indirect
 	github.com/google/uuid v1.1.0 // indirect
 	github.com/hashicorp/go-getter v1.0.0
@@ -12,6 +13,7 @@ require (
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/pflag v1.0.3 // indirect
 	github.com/stretchr/testify v1.3.0
+	github.com/vbauerster/mpb v3.3.3+incompatible
 	golang.org/x/crypto v0.0.0-20190122013713-64072686203f // indirect
 	gopkg.in/yaml.v2 v2.2.2 // indirect
 )
