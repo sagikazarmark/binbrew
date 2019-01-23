@@ -13,6 +13,7 @@ func NewGithubProvider() *Provider {
 			"golangci-lint": "golangci/golangci-lint",
 			"protobuf":      "google/protobuf",
 			"protoc":        "google/protobuf",
+			"protolock":     "nilslice/protolock",
 			"goreleaser":    "goreleaser/goreleaser",
 			"gotestsum":     "gotestyourself/gotestsum",
 			"jq":            "stedolan/jq",
@@ -106,6 +107,15 @@ func NewGithubProvider() *Provider {
 						Description: "Database migrations. CLI and Golang library.",
 						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/migrate.{{ .Os }}-{{ .Arch }}.tar.gz"),
 						File:        "migrate.{{ .Os }}-{{ .Arch }}",
+					},
+				},
+			},
+			"nilslice/protolock": {
+				{
+					VersionConstraint: "0.10.0",
+					Template: BinaryTemplate{
+						Description: "Protocol Buffer companion tool. Track your .proto files and prevent changes to messages and services which impact API compatibility.",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/protolock.20190101T225741Z.{{ .Os }}-{{ .Arch }}.tgz"),
 					},
 				},
 			},
