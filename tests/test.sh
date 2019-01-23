@@ -31,9 +31,11 @@ echo "Installing golang-migrate/migrate 4.2.1"
 echo "Installing nilslice/protolock 0.10.0"
 ../build/binbrew install nilslice/protolock@0.10.0
 
-
 echo "Installing stedolan/jq 1.6"
 ../build/binbrew install stedolan/jq@1.6
 
 echo "Installing stedolan/jq 1.4"
 ../build/binbrew install stedolan/jq@1.4
+
+echo "Installing uber/prototool 1.3.0"
+../build/binbrew install uber/prototool@1.3.0

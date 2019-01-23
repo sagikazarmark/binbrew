@@ -27,3 +27,6 @@ echo "Installing jq 1.6"
 
 echo "Installing protolock 0.10.0"
 ../build/binbrew install protolock@0.10.0
+
+echo "Installing prototool 1.3.0"
+../build/binbrew install prototool@1.3.0
