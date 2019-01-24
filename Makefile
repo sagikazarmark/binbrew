@@ -81,6 +81,14 @@ test: bin/gotestsum ## Run tests
 	@mkdir -p ${BUILD_DIR}/test_results/${TEST_REPORT}
 	bin/gotestsum --no-summary=skipped --junitfile ${BUILD_DIR}/test_results/${TEST_REPORT}/${TEST_REPORT_NAME} --format ${TEST_FORMAT} -- $(filter-out -v,${GOARGS}) $(if ${TEST_PKGS},${TEST_PKGS},./...)
 
+.PHONY: test-all
+test-all: ## Run all tests
+	@${MAKE} GOARGS="${GOARGS} -run .\*" TEST_REPORT=all test
+
+.PHONY: test-acceptance
+test-acceptance: build ## Run acceptance tests
+	@${MAKE} GOARGS="${GOARGS} -run ^TestAcceptance\$$\$$" TEST_REPORT=acceptance test
+
 bin/golangci-lint: bin/golangci-lint-${GOLANGCI_VERSION}
 	@ln -sf golangci-lint-${GOLANGCI_VERSION} bin/golangci-lint
 bin/golangci-lint-${GOLANGCI_VERSION}:
