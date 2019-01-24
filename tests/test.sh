@@ -28,6 +28,9 @@ echo "Installing gotestyourself/gotestsum 0.3.2"
 echo "Installing golang-migrate/migrate 4.2.1"
 ../build/binbrew install golang-migrate/migrate@4.2.1
 
+echo "Installing myitcv/gobin 0.0.4"
+../build/binbrew install myitcv/gobin@0.0.4
+
 echo "Installing nilslice/protolock 0.10.0"
 ../build/binbrew install nilslice/protolock@0.10.0
 

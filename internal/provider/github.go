@@ -10,6 +10,7 @@ func NewGithubProvider() *Provider {
 	return &Provider{
 		vanityNames: map[string]string{
 			"dep":           "golang/dep",
+			"gobin":         "myitcv/gobin",
 			"golangci-lint": "golangci/golangci-lint",
 			"protobuf":      "google/protobuf",
 			"protoc":        "google/protobuf",
@@ -108,6 +109,16 @@ func NewGithubProvider() *Provider {
 						Description: "Database migrations. CLI and Golang library.",
 						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/migrate.{{ .Os }}-{{ .Arch }}.tar.gz"),
 						File:        "migrate.{{ .Os }}-{{ .Arch }}",
+					},
+				},
+			},
+			"myitcv/gobin": {
+				{
+					VersionConstraint: "*",
+					Template: BinaryTemplate{
+						Description: "gobin is an experimental, module-aware command to install/run main packages. ",
+						URL:         fmt.Sprintf(urlPrefix, "v{{ .Version }}/{{ .Os }}-{{ .Arch }}"),
+						File:        "{{ .Os }}-{{ .Arch }}",
 					},
 				},
 			},
