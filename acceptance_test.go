@@ -1,3 +1,4 @@
+// nolint: dupl
 package main
 
 import (
@@ -109,7 +110,7 @@ func testMulti(t *testing.T) {
 
 	cleanDir(t, "multi_test")
 
-	var bins []binaryTest
+	var bins = make([]binaryTest, 0)
 	var installArgs = []string{"install"}
 
 	for _, bin := range binaries[:3] {
