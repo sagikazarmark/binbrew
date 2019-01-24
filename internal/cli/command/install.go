@@ -16,7 +16,8 @@ import (
 )
 
 type installOptions struct {
-	binaries []string
+	binaries   []string
+	noProgress bool
 }
 
 // NewInstallCommand returns a cobra command for `binbrew install`.
@@ -34,6 +35,8 @@ func NewInstallCommand() *cobra.Command {
 		},
 		DisableFlagsInUseLine: true,
 	}
+
+	cmd.Flags().BoolVar(&options.noProgress, "no-progress", false, "Do not show download progress")
 
 	return cmd
 }
@@ -63,8 +66,13 @@ func runInstall(options installOptions) error {
 			return err
 		}
 
-		pb := &progressBar{}
-		err = getter.GetAny(tmp, binary.URL, getter.WithProgress(pb))
+		pb := newProgressBar()
+		var getterOptions = make([]getter.ClientOption, 0)
+		if !options.noProgress {
+			getterOptions = append(getterOptions, getter.WithProgress(pb))
+		}
+
+		err = getter.GetAny(tmp, binary.URL, getterOptions...)
 		pb.progress.Wait()
 		if err != nil {
 			return err
@@ -89,6 +97,12 @@ type progressBar struct {
 	lock sync.Mutex
 
 	progress *mpb.Progress
+}
+
+func newProgressBar() *progressBar {
+	return &progressBar{
+		progress: mpb.New(),
+	}
 }
 
 // TrackProgress instantiates a new progress bar that will
