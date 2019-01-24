@@ -7,6 +7,9 @@ rm -rf bin/
 echo "Installing dep 0.5.0"
 ../build/binbrew install dep@0.5.0
 
+echo "Installing gobin 0.0.4"
+../build/binbrew install gobin@0.0.4
+
 echo "Installing golangci-lint 1.12.5"
 ../build/binbrew install golangci-lint@1.12.5
 
